@@ -1,5 +1,6 @@
 from pynput import keyboard
-import pydirectinput
+import subprocess
+import os
 
 class DayZRunner:
     def __init__(self, window_name):
@@ -27,19 +28,19 @@ class DayZRunner:
         if self.running:
             print("Stopping run")
             self.running = False
-            pydirectinput.keyUp('shift')  # Release Shift
-            pydirectinput.keyUp('w')  # Release W
+            subprocess.run(['xdotool', 'keyup', 'shift'], check=False)
+            subprocess.run(['xdotool', 'keyup', 'w'], check=False)
         else:
             print("Starting run")
             self.running = True
-            pydirectinput.keyDown('shift')  # Press Shift
-            pydirectinput.keyDown('w')  # Press W
+            subprocess.run(['xdotool', 'keydown', 'shift'], check=False)
+            subprocess.run(['xdotool', 'keydown', 'w'], check=False)
 
     def cleanup_and_exit(self):
         print("Cleaning up...")
         if self.running:
-            pydirectinput.keyUp('shift')  # Ensure Shift is released
-            pydirectinput.keyUp('w')  # Ensure W is released
+            subprocess.run(['xdotool', 'keyup', 'shift'], check=False)
+            subprocess.run(['xdotool', 'keyup', 'w'], check=False)
         self.listener.stop()  # Stop the key listener
         print("Exiting...")
         exit(0)
